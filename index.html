@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Опрос: Влияние маркетплейсов</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #4a6bdf, #6a11cb);
+            color: white;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .description {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #4a6bdf;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 107, 223, 0.2);
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f9fafc;
+            border-radius: 8px;
+            border-left: 4px solid #4a6bdf;
+        }
+        
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .option input {
+            margin-right: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4a6bdf, #6a11cb);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .success {
+            color: #2ecc71;
+            text-align: center;
+            padding: 15px;
+            font-weight: 600;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 15px;
+            font-weight: 600;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .note {
+            font-style: italic;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Влияние маркетплейсов на жизнь современного человека</h1>
+            <p class="description">Примите участие в нашем опросе. Ваше мнение очень важно для нас!</p>
+        </header>
+        
+        <div class="card">
+            <div class="form-group">
+                <label for="username">Ваш никнейм:</label>
+                <input type="text" id="username" placeholder="Введите ваш никнейм" required>
+            </div>
+            
+            <form id="survey-form">
+                <div class="question">
+                    <div class="question-title">1. Как часто вы совершаете покупки на маркетплейсах?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="frequency-daily" name="frequency" value="Ежедневно" required>
+                            <label for="frequency-daily">Ежедневно</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="frequency-weekly" name="frequency" value="Несколько раз в неделю">
+                            <label for="frequency-weekly">Несколько раз в неделю</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="frequency-monthly" name="frequency" value="Несколько раз в месяц">
+                            <label for="frequency-monthly">Несколько раз в месяц</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="frequency-rarely" name="frequency" value="Редко">
+                            <label for="frequency-rarely">Редко</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">2. Что вы чаще всего покупаете?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="checkbox" id="product-electronics" name="products" value="Электроника">
+                            <label for="product-electronics">Электроника</label>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" id="product-clothes" name="products" value="Одежда и обувь">
+                            <label for="product-clothes">Одежда и обувь</label>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" id="product-home" name="products" value="Товары для дома">
+                            <label for="product-home">Товары для дома</label>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" id="product-food" name="products" value="Продукты питания">
+                            <label for="product-food">Продукты питания</label>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" id="product-books" name="products" value="Книги">
+                            <label for="product-books">Книги</label>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" id="product-other" name="products" value="Другое">
+                            <label for="product-other">Другое</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">3. Считаете ли вы, что маркетплейсы экономят ваше время?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="time-yes" name="time-saving" value="Да" required>
+                            <label for="time-yes">Да</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="time-no" name="time-saving" value="Нет">
+                            <label for="time-no">Нет</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="time-sometimes" name="time-saving" value="Иногда">
+                            <label for="time-sometimes">Иногда</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-title">4. Сталкивались ли вы с проблемами при онлайн-покупках?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="problems-yes" name="problems" value="Да" required>
+                            <label for="problems-yes">Да</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="problems-no" name="problems" value="Нет">
+                            <label for="problems-no">Нет</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submit-btn">Отправить ответы</button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Отправка данных...</p>
+            </div>
+            
+            <div id="success-message" class="success">
+                Спасибо за участие в опросе! Ваши ответы были сохранены.
+            </div>
+            
+            <div id="error-message" class="error">
+                Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.
+            </div>
+            
+            <p class="note">Все ответы анонимны и будут использоваться только в обобщенном виде для исследования.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const surveyForm = document.getElementById('survey-form');
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            const loadingElement = document.getElementById('loading');
+            const usernameInput = document.getElementById('username');
+            
+            // ЗАМЕНИТЕ ЭТОТ URL на URL вашего Google Apps Script веб-приложения
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxtOkwTF-G3RQruRXgcwSPIv74olHqC5I_YcHoFWObyufF4xsLUFXHgH7T7ttxdxiH9iw/exec';
+            
+            surveyForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const username = usernameInput.value.trim();
+                if (!username) {
+                    alert('Пожалуйста, введите ваш никнейм');
+                    return;
+                }
+                
+                const answers = {
+                    username: username,
+                    frequency: document.querySelector('input[name="frequency"]:checked').value,
+                    products: Array.from(document.querySelectorAll('input[name="products"]:checked')).map(cb => cb.value),
+                    timeSaving: document.querySelector('input[name="time-saving"]:checked').value,
+                    problems: document.querySelector('input[name="problems"]:checked').value
+                };
+                
+                loadingElement.style.display = 'block';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                try {
+                    const response = await fetch(scriptURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain; charset=utf-8',
+                        },
+                        body: JSON.stringify(answers)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.result === 'success') {
+                        surveyForm.reset();
+                        usernameInput.value = '';
+                        successMessage.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                    } else {
+                        throw new Error(result.error);
+                    }
+                    
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                } finally {
+                    loadingElement.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
