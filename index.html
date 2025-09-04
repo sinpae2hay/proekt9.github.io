@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Опрос: Влияние маркетплейсов</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -13,159 +14,307 @@
         }
         
         body {
-            background-color: #f5f7fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
             color: #333;
             line-height: 1.6;
             padding: 20px;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         header {
             text-align: center;
-            padding: 30px;
+            padding: 40px 30px;
             background: linear-gradient(135deg, #4a6bdf, #6a11cb);
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(30deg);
         }
         
         h1 {
-            margin-bottom: 10px;
-            font-size: 28px;
+            margin-bottom: 15px;
+            font-size: 32px;
+            position: relative;
+            animation: textGlow 3s infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            }
         }
         
         .description {
-            font-size: 16px;
+            font-size: 17px;
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
         }
         
         .card {
-            padding: 25px;
+            padding: 30px;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInRight 0.6s ease forwards;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #444;
+            font-size: 17px;
         }
         
         input[type="text"] {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background-color: #f9fafc;
         }
         
         input[type="text"]:focus {
             border-color: #4a6bdf;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(74, 107, 223, 0.2);
+            box-shadow: 0 0 0 3px rgba(74, 107, 223, 0.2);
+            background-color: white;
+            transform: scale(1.02);
+        }
+        
+        .input-highlight {
+            display: block;
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90deg, #4a6bdf, #6a11cb);
+            margin-top: 2px;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        input[type="text"]:focus + .input-highlight {
+            width: 100%;
         }
         
         .question {
-            margin-bottom: 25px;
-            padding: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
             background-color: #f9fafc;
-            border-radius: 8px;
-            border-left: 4px solid #4a6bdf;
+            border-radius: 12px;
+            border-left: 5px solid #4a6bdf;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
         }
+        
+        .question:nth-child(1) { animation-delay: 0.4s; }
+        .question:nth-child(2) { animation-delay: 0.5s; }
+        .question:nth-child(3) { animation-delay: 0.6s; }
+        .question:nth-child(4) { animation-delay: 0.7s; }
         
         .question-title {
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: #333;
-            font-size: 18px;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .question-title i {
+            margin-right: 10px;
+            color: #6a11cb;
         }
         
         .options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
         
         .option {
             display: flex;
             align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .option:hover {
+            background-color: rgba(74, 107, 223, 0.1);
+            transform: translateX(5px);
         }
         
         .option input {
-            margin-right: 10px;
+            margin-right: 12px;
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+        
+        .option label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .option input:checked + label {
+            color: #4a6bdf;
+            font-weight: 600;
         }
         
         button {
             background: linear-gradient(135deg, #4a6bdf, #6a11cb);
             color: white;
             border: none;
-            padding: 14px 25px;
-            border-radius: 6px;
+            padding: 16px 30px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+            animation-delay: 0.8s;
+        }
+        
+        button i {
+            margin-left: 10px;
+            transition: transform 0.3s;
         }
         
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(74, 107, 223, 0.4);
+        }
+        
+        button:hover i {
+            transform: translateX(5px);
         }
         
         button:active {
             transform: translateY(0);
         }
         
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
         .success {
-            color: #2ecc71;
+            color: #27ae60;
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             font-weight: 600;
-            background-color: rgba(46, 204, 113, 0.1);
-            border-radius: 6px;
-            margin-top: 20px;
+            background-color: rgba(39, 174, 96, 0.1);
+            border-radius: 8px;
+            margin-top: 25px;
             display: none;
+            border-left: 5px solid #27ae60;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
         }
         
         .error {
             color: #e74c3c;
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             font-weight: 600;
             background-color: rgba(231, 76, 60, 0.1);
-            border-radius: 6px;
-            margin-top: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
             display: none;
+            border-left: 5px solid #e74c3c;
         }
         
         .loading {
             display: none;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: fadeIn 0.5s ease forwards;
         }
         
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-left: 4px solid #3498db;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 0 auto 15px;
         }
         
         @keyframes spin {
@@ -177,20 +326,164 @@
             font-style: italic;
             color: #7f8c8d;
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .recommendations {
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f9fafc 0%, #edf1f7 100%);
+            border-radius: 15px;
+            border-top: 5px solid #6a11cb;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 1s;
+        }
+        
+        .recommendations h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a6bdf;
+            font-size: 26px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .recommendations h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #4a6bdf, #6a11cb);
+            border-radius: 3px;
+        }
+        
+        .recommendation-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .recommendation-group:hover {
+            transform: translateY(-5px);
+        }
+        
+        .recommendation-group h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #6a11cb;
+            font-size: 20px;
+        }
+        
+        .recommendation-group h3 i {
+            margin-right: 10px;
+            background: linear-gradient(135deg, #4a6bdf, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .recommendation-list {
+            list-style-type: none;
+        }
+        
+        .recommendation-list li {
+            margin-bottom: 12px;
+            padding: 12px 15px 12px 45px;
+            position: relative;
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .recommendation-list li:hover {
+            border-left-color: #4a6bdf;
+            background-color: #f5f8ff;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .recommendation-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 26px;
+            height: 26px;
+            background: linear-gradient(135deg, #4a6bdf, #6a11cb);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .floating-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4a6bdf, #6a11cb);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 20px rgba(74, 107, 223, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards, pulse 2s infinite;
+            animation-delay: 1.2s;
         }
         
         @media (max-width: 600px) {
             .container {
-                border-radius: 0;
+                border-radius: 10px;
             }
             
             header {
-                padding: 20px;
+                padding: 25px 20px;
             }
             
             h1 {
-                font-size: 24px;
+                font-size: 26px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+            
+            button {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+            
+            .recommendations {
+                padding: 20px;
+            }
+            
+            .recommendation-group {
+                padding: 15px;
             }
         }
     </style>
@@ -204,13 +497,14 @@
         
         <div class="card">
             <div class="form-group">
-                <label for="username">Ваш никнейм:</label>
+                <label for="username"><i class="fas fa-user"></i> Ваш никнейм:</label>
                 <input type="text" id="username" placeholder="Введите ваш никнейм" required>
+                <span class="input-highlight"></span>
             </div>
             
             <form id="survey-form">
                 <div class="question">
-                    <div class="question-title">1. Как часто вы совершаете покупки на маркетплейсах?</div>
+                    <div class="question-title"><i class="fas fa-shopping-cart"></i> 1. Как часто вы совершаете покупки на маркетплейсах?</div>
                     <div class="options">
                         <div class="option">
                             <input type="radio" id="frequency-daily" name="frequency" value="Ежедневно" required>
@@ -232,7 +526,7 @@
                 </div>
                 
                 <div class="question">
-                    <div class="question-title">2. Что вы чаще всего покупаете?</div>
+                    <div class="question-title"><i class="fas fa-box-open"></i> 2. Что вы чаще всего покупаете?</div>
                     <div class="options">
                         <div class="option">
                             <input type="checkbox" id="product-electronics" name="products" value="Электроника">
@@ -262,7 +556,7 @@
                 </div>
                 
                 <div class="question">
-                    <div class="question-title">3. Считаете ли вы, что маркетплейсы экономят ваше время?</div>
+                    <div class="question-title"><i class="fas fa-clock"></i> 3. Считаете ли вы, что маркетплейсы экономят ваше время?</div>
                     <div class="options">
                         <div class="option">
                             <input type="radio" id="time-yes" name="time-saving" value="Да" required>
@@ -280,7 +574,7 @@
                 </div>
                 
                 <div class="question">
-                    <div class="question-title">4. Сталкивались ли вы с проблемами при онлайн-покупках?</div>
+                    <div class="question-title"><i class="fas fa-exclamation-triangle"></i> 4. Сталкивались ли вы с проблемами при онлайн-покупках?</div>
                     <div class="options">
                         <div class="option">
                             <input type="radio" id="problems-yes" name="problems" value="Да" required>
@@ -293,7 +587,9 @@
                     </div>
                 </div>
                 
-                <button type="submit" id="submit-btn">Отправить ответы</button>
+                <button type="submit" id="submit-btn">
+                    Отправить ответы <i class="fas fa-paper-plane"></i>
+                </button>
             </form>
             
             <div class="loading" id="loading">
@@ -302,15 +598,74 @@
             </div>
             
             <div id="success-message" class="success">
-                Спасибо за участие в опросе! Ваши ответы были сохранены.
+                <i class="fas fa-check-circle"></i> Спасибо за участие в опросе! Ваши ответы были сохранены.
             </div>
             
             <div id="error-message" class="error">
-                Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.
+                <i class="fas fa-exclamation-circle"></i> Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.
             </div>
             
-            <p class="note">Все ответы анонимны и будут использоваться только в обобщенном виде для исследования.</p>
+            <p class="note">
+                <i class="fas fa-info-circle"></i> Все ответы анонимны и будут использоваться только в обобщенном виде для исследования.
+            </p>
+            
+            <!-- Новый раздел с рекомендациями -->
+            <div class="recommendations">
+                <h2><i class="fas fa-lightbulb"></i> Рекомендации по использованию маркетплейсов</h2>
+                
+                <div class="recommendation-group">
+                    <h3><i class="fas fa-users"></i> Для потребителей:</h3>
+                    <ul class="recommendation-list">
+                        <li>Сравнивайте цены на разных маркетплейсах перед покупкой</li>
+                        <li>Внимательно читайте отзывы и проверяйте рейтинги продавцов</li>
+                        <li>Ограничивайте время, проведенное на маркетплейсах, чтобы избежать импульсивных покупок</li>
+                        <li>Используйте безопасные методы оплаты и двухфакторную аутентификацию</li>
+                        <li>Проверяйте условия возврата и гарантии перед совершением покупки</li>
+                        <li>Составляйте список необходимых покупок и придерживайтесь его</li>
+                        <li>Используйте кэшбэк-сервисы для возврата части потраченных средств</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-group">
+                    <h3><i class="fas fa-graduation-cap"></i> Для образовательных учреждений:</h3>
+                    <ul class="recommendation-list">
+                        <li>Проводите уроки финансовой грамотности, включая тему ответственных онлайн-покупок</li>
+                        <li>Организуйте дискуссии о влиянии маркетплейсов на потребительское поведение и общество</li>
+                        <li>Внедрите программы по развитию критического мышления при анализе онлайн-рекламы</li>
+                        <li>Создайте курсы по кибербезопасности для безопасных онлайн-покупок</li>
+                        <li>Приглашайте экспертов из сферы e-commerce для проведения мастер-классов</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-group">
+                    <h3><i class="fas fa-laptop-code"></i> Для разработчиков маркетплейсов:</h3>
+                    <ul class="recommendation-list">
+                        <li>Улучшите системы проверки качества товаров и продавцов</li>
+                        <li>Внедрите инструменты, помогающие пользователям контролировать свои расходы</li>
+                        <li>Создайте более прозрачную систему отзывов и рейтингов</li>
+                        <li>Разработайте персонализированные настройки для ограничения времени использования платформы</li>
+                        <li>Упростите процесс возврата товаров и решения спорных ситуаций</li>
+                        <li>Добавьте функцию сравнения цен на одинаковые товары у разных продавцов</li>
+                        <li>Обеспечьте лучшее фильтрование товаров по экологичности и этичности производства</li>
+                    </ul>
+                </div>
+
+                <div class="recommendation-group">
+                    <h3><i class="fas fa-shield-alt"></i> Общие рекомендации по безопасности:</h3>
+                    <ul class="recommendation-list">
+                        <li>Никогда не сообщайте данные своих банковских карт в чатах или по email</li>
+                        <li>Используйте уникальные сложные пароли для каждого маркетплейса</li>
+                        <li>Включайте уведомления о всех операциях по вашему аккаунту</li>
+                        <li>Проверяйте HTTPS соединение при вводе платежных данных</li>
+                        <li>Регулярно обновляйте приложения маркетплейсов для получения последних исправлений безопасности</li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="floating-icon" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="fas fa-arrow-up"></i>
     </div>
 
     <script>
@@ -321,6 +676,40 @@
             const loadingElement = document.getElementById('loading');
             const usernameInput = document.getElementById('username');
             
+            // Анимация появления элементов при прокрутке
+            const animatedElements = document.querySelectorAll('.question, .recommendation-group');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Анимация для input field
+            usernameInput.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            usernameInput.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+            
+            // Анимация для radio и checkbox
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    this.style.backgroundColor = 'rgba(74, 107, 223, 0.15)';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 300);
+                });
+            });
+            
             // ЗАМЕНИТЕ ЭТОТ URL на URL вашего Google Apps Script веб-приложения
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxtOkwTF-G3RQruRXgcwSPIv74olHqC5I_YcHoFWObyufF4xsLUFXHgH7T7ttxdxiH9iw/exec';
             
@@ -330,20 +719,35 @@
                 const username = usernameInput.value.trim();
                 if (!username) {
                     alert('Пожалуйста, введите ваш никнейм');
+                    usernameInput.focus();
+                    return;
+                }
+                
+                // Проверка, что все обязательные вопросы answered
+                const frequencySelected = document.querySelector('input[name="frequency"]:checked');
+                const timeSavingSelected = document.querySelector('input[name="time-saving"]:checked');
+                const problemsSelected = document.querySelector('input[name="problems"]:checked');
+                
+                if (!frequencySelected || !timeSavingSelected || !problemsSelected) {
+                    alert('Пожалуйста, ответьте на все обязательные вопросы');
                     return;
                 }
                 
                 const answers = {
                     username: username,
-                    frequency: document.querySelector('input[name="frequency"]:checked').value,
+                    frequency: frequencySelected.value,
                     products: Array.from(document.querySelectorAll('input[name="products"]:checked')).map(cb => cb.value),
-                    timeSaving: document.querySelector('input[name="time-saving"]:checked').value,
-                    problems: document.querySelector('input[name="problems"]:checked').value
+                    timeSaving: timeSavingSelected.value,
+                    problems: problemsSelected.value
                 };
                 
                 loadingElement.style.display = 'block';
                 successMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
+                
+                // Анимация отправки
+                surveyForm.style.opacity = '0.5';
+                surveyForm.style.pointerEvents = 'none';
                 
                 try {
                     const response = await fetch(scriptURL, {
@@ -361,6 +765,9 @@
                         usernameInput.value = '';
                         successMessage.style.display = 'block';
                         errorMessage.style.display = 'none';
+                        
+                        // Плавная прокрутка к сообщению об успехе
+                        successMessage.scrollIntoView({ behavior: 'smooth' });
                     } else {
                         throw new Error(result.error);
                     }
@@ -371,6 +778,8 @@
                     successMessage.style.display = 'none';
                 } finally {
                     loadingElement.style.display = 'none';
+                    surveyForm.style.opacity = '1';
+                    surveyForm.style.pointerEvents = 'auto';
                 }
             });
         });
